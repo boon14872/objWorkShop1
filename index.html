@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>คำนวณภาษี</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container pt-5 mx-auto">
+      <div class="row">
+        <!-- form to add salary from user have field name lastname salary gurante -->
+        <div class="col-md-6">
+          <form action="" method="post">
+            <div class="form-group">
+              <label for="name">ชื่อ-นามสกุล</label>
+              <input
+                type="text"
+                class="form-control"
+                name="name"
+                id="name"
+                placeholder="ชื่อ-นามสกุล"
+              />
+            </div>
+            <div class="form-group">
+              <label for="salary">เงินเดือน</label>
+              <input
+                type="number"
+                class="form-control"
+                name="salary"
+                id="salary"
+                placeholder="เงินเดือน"
+              />
+            </div>
+            <div class="form-group">
+              <label for="insurance ">เงินประกันชีวิต</label>
+              <input
+                type="number"
+                class="form-control"
+                name="insurance"
+                id="insurance"
+                placeholder="เงินประกันชีวิต"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary" id="saveBtn">
+              บันทึก
+            </button>
+          </form>
+          <!-- calculate button -->
+          <a href="calculate.php" class="btn btn-success my-4">คำนวณ</a>
+          <!-- list to show raw data -->
+          <!-- table to show raw data -->
+          <div id="tableBox"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let datas = [];
+        let error = [];
+        const addNewSalary = (e) => {
+          e.preventDefault();
+          const name = document.getElementById("name").value;
+          const salary = document.getElementById("salary").value;
+          const insurance = document.getElementById("insurance").value;
+          const data = {
+            name,
+            salary,
+            insurance,
+          };
+          let validate = [];
+          if (name === "") {
+            validate.push(validateInValid("กรุณากรอกชื่อ-นามสกุล", "name"));
+          } else {
+            validate.push(validateValid("name"));
+          }
+          if (salary === "") {
+            validate.push(validateInValid("กรุณากรอกเงินเดือน", "salary"));
+          } else {
+            validate.push(validateValid("salary"));
+          }
+
+          if (insurance === "") {
+            validate.push(
+              validateInValid("กรุณากรอกเงินประกันชีวิต", "insurance")
+            );
+          } else {
+            validate.push(validateValid("insurance"));
+          }
+
+          if (
+            validate.every((v) => {
+              return v === true;
+            })
+          ) {
+            datas.push(data);
+            document.getElementById("name").value = "";
+            document.getElementById("salary").value = "";
+            document.getElementById("insurance").value = "";
+            console.log(datas);
+            document.getElementById("tableBox").innerHTML =
+              generateTable(datas);
+          } else {
+            console.log("กรุณากรอกข้อมูลให้ครบ");
+          }
+        };
+        document
+          .getElementById("saveBtn")
+          .addEventListener("click", addNewSalary);
+      });
+
+      const getErrorHtml = (error) => {
+        let html = `<div class="invalid-feedback d-block" id="error">${error}</div>`;
+        return html;
+      };
+
+      const validateInValid = (text, field) => {
+        document.getElementById(field).classList.add("is-invalid");
+        // insert error html after field check error if error is exist
+        if (document.getElementById(field).nextElementSibling?.id === "error") {
+          document.getElementById(field).nextSibling.remove();
+        }
+        document
+          .getElementById(field)
+          .insertAdjacentHTML("afterend", getErrorHtml(text));
+        return false;
+      };
+      const validateValid = (field) => {
+        document.getElementById(field).nextSibling?.remove();
+        document.getElementById(field).classList?.remove("is-invalid");
+        document.getElementById(field).classList.add("is-valid");
+        return true;
+      };
+
+      const generateTable = (datas) => {
+        let html = `<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">ชื่อ-นามสกุล</th>
+            <th scope="col">เงินเดือน</th>
+            <th scope="col">เงินประกันชีวิต</th>
+          </tr>
+        </thead>
+        <tbody>`;
+        datas.forEach((data) => {
+          html += `<tr>
+            <td>${data.name}</td>
+            <td>${data.salary}</td>
+            <td>${data.insurance}</td>
+          </tr>`;
+        });
+        html += `</tbody>
+        </table>`;
+        return html;
+      };
+      const getNetIncome = (income) => {
+        const expense = getExpense(income);
+        const privateDiscount = 30000;
+        const netIncome = income - expense - privateDiscount;
+        const insurance = getInsurance(netIncome, insurance);
+        const vat = calculateVat(netIncome);
+
+      };
+
+      const getExpense = (income) => {
+        const expense = income * 0.4;
+        if (expense > 60000) {
+          return 60000;
+        } else {
+          return expense;
+        }
+      };
+
+      const getInsurance = (income, insurance) => {
+        const netInsurance = income - insurance;
+        if (netInsurance > 50000) {
+          return 50000;
+        } else {
+          return netInsurance;
+        }
+      };
+      const calculateVat = (income) => {
+        if (income >= 0 && income <= 50000) {
+          return income;
+        } else if (income <= 10000) {
+          return income * 0.05;
+        } else if (income <= 500000) {
+          return income * 0.1;
+        } else if (income <= 1000000) {
+          return income * 0.2;
+        } else if (income <= 4000000) {
+          return income * 0.3;
+        } else if (income > 4000000) {
+          return income * 0.37;
+        } else {
+          return 0;
+        }
+      };
+    </script>
+  </body>
+</html>
