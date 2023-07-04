@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     let datas = [];
-    let error = [];
     const addNewSalary = (e) => {
       e.preventDefault();
       const name = document.getElementById("name").value;
@@ -205,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const calculateVat = (income) => {
     if (income >= 0 && income <= 50000) {
       return 0;
-    } else if (income <= 10000) {
+    } else if (income <= 100000) {
       return 0.05;
     } else if (income <= 500000) {
       return 0.1;
