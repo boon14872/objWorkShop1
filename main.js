@@ -164,12 +164,12 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(income, insurance);
     const expense = getExpense(+income);
     const privateDiscount = 30000;
-    const incomeWithDC = +income - expense - privateDiscount;
+    const incomeWithDC = +income - expense - privateDiscount < 0 ? 0 : +income - expense - privateDiscount;
     const netInsurance = getInsurance(+insurance);
-    const netIncome = incomeWithDC - netInsurance;
+    const netIncome = incomeWithDC - netInsurance < 0 ? 0 : incomeWithDC - netInsurance;
     const vatRate = calculateVat(netIncome - netInsurance);
     const vat = vatRate * netIncome;
-    const netIncomeAfterTax = income - vat;
+    const netIncomeAfterTax = income - vat < 0 ? 0 : income - vat;
     return {
       privateDiscount,
       netIncome,
@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
   const calculateVat = (income) => {
-    if (income >= 0 && income <= 50000) {
+    if (income <= 50000) {
       return 0;
     } else if (income <= 100000) {
       return 0.05;
