@@ -38,9 +38,7 @@
 
 นี่คือภาพหน้าจอบางส่วนของ VAT Calculator:
 
-![VAT Calculator - มุมมองเดสก์ท็อ
-
-ป](screenshots/sc1.png)
+![VAT Calculator - มุมมองเดสก์ท็อป](screenshots/sc1.png)
 
 ## การพัฒนา
 
