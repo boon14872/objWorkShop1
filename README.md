@@ -40,9 +40,7 @@
 
 ![VAT Calculator - มุมมองเดสก์ท็อ
 
-ป](screenshots/desktop.png)
-
-![VAT Calculator - มุมมองมือถือ](screenshots/mobile.png)
+ป](screenshots/sc1.png)
 
 ## การพัฒนา
 
