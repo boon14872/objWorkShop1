@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <thead>
       <tr>
         <th scope="col">ชื่อ-นามสกุล</th>
-        <th scope="col">เงินเดือน</th>
+        <th scope="col">รายได้</th>
         <th scope="col">เงินประกันชีวิต</th>
         ${
           calvat
